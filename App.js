@@ -1,79 +1,61 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+//import "tailwindcss";
+import React from 'react';
+import { Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SupplementReminderForm from './components/SupplementReminderForm';
-import BottomNav from './components/BottomNav';
 
-function Home() {
-  return <h2 style={{textAlign: 'center', marginTop: '2rem'}}>ברוך הבא לאפליקציה!</h2>
-}
 
-function Settings() {
-  return <h2 style={{ textAlign: 'center', marginTop: '2rem'}}>הגדרות</h2>
-}
+const Tab = createBottomTabNavigator();
 
-function App() {
-  // משתנים לשמירת הקלט מהמשתמש
-  const [name, setName] = useState('');
-  const [weight, setWeight] = useState('');
-  const [height, setHeight] = useState('');
-
-  // כשמשתמש לוחץ על כפתור "הבא"
-  const handleSubmit = (e) => {
-    e.preventDefault(); // כדי שלא ירענן את הדף
-    console.log('שם:', name);
-    console.log('משקל:', weight);
-    console.log('גובה:', height);
-    alert(`שלום ${name}! נשמרו הפרטים שלך.`);
-    // כאן נוכל בהמשך לשמור ב-localStorage או לשלוח לשרת
-  };
-
+// מסך הבית
+function HomeScreen() {
   return (
-    <><Router>
-      <div style={{ paddingBottom: '60px' }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/add" element {...<SupplementReminderForm />} />
-        </Routes>
-      </div>
-      <BottomNav />
-    </Router><div class="" style={{ maxWidth: '400px', margin: 'auto', padding: '2rem' }}>
-        <h2>הזנת פרטים</h2>
-        <form onSubmit={handleSubmit}>
-          <label>
-            שם:
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required />
-          </label>
-          <br /><br />
-
-          <label>
-            משקל (בק"ג):
-            <input
-              type="number"
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
-              required />
-          </label>
-          <br /><br />
-
-          <label>
-            גובה (בס"מ):
-            <input
-              type="number"
-              value={height}
-              onChange={(e) => setHeight(e.target.value)}
-              required />
-          </label>
-          <br /><br />
-
-          <button type="submit">הבא</button>
-        </form>
-        <SupplementReminderForm />
-      </div></>
+    <View style={styles.container}>
+      <Text style={styles.text}>ברוך הבא!</Text>
+    </View>
   );
 }
 
-export default App;
+// מסך הוספת תזכורת
+function AddReminderScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>טופס הוספת תזכורת כאן</Text>
+      <SupplementReminderForm/>
+    </View>
+  );
+}
+
+// מסך הגדרות
+function SettingsScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>מסך הגדרות</Text>
+    </View>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator screenOptions={{ tabBarLabelStyle: { fontSize: 14 }, headerShown: false }}>
+        <Tab.Screen name="בית" component={HomeScreen} />
+        <Tab.Screen name="הוסף תזכורת" component={AddReminderScreen} />
+        <Tab.Screen name="הגדרות" component={SettingsScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
+// עיצוב בסיסי
+const styles = {
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 20,
+  },
+};
